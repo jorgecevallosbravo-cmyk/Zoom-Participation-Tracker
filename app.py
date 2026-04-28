@@ -15,9 +15,9 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Drawing
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
-from reportlab.graphics.shapes import Rect, String, Group
+from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.charts.piecharts import Pie
 import tempfile
 import os
