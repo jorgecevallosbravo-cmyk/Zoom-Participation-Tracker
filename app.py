@@ -15,8 +15,10 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Drawing
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.graphics.shapes import Rect, String, Group
+from reportlab.graphics.charts.piecharts import Pie
 import tempfile
 import os
 
@@ -77,6 +79,7 @@ def count_words(text):
 def parse_transcript(transcript_content):
     """Parse the Zoom transcript and count words per speaker."""
     word_counts = defaultdict(int)
+    teacher_word_count = 0
     
     lines = transcript_content.decode('utf-8').split('\n')
     
@@ -92,11 +95,15 @@ def parse_transcript(transcript_content):
             current_speaker = speaker_match.group(1)
         elif current_speaker and line:
             # This is speech content
-            # Skip if it's the teacher
-            if not fuzzy_match_name(current_speaker, TEACHER_NAME):
-                word_counts[current_speaker] += count_words(line)
+            word_count = count_words(line)
+            
+            # Check if it's the teacher
+            if fuzzy_match_name(current_speaker, TEACHER_NAME):
+                teacher_word_count += word_count
+            else:
+                word_counts[current_speaker] += word_count
     
-    return dict(word_counts)
+    return dict(word_counts), teacher_word_count
 
 
 def match_students_to_transcript(student_df, word_counts, student_name_column):
@@ -123,8 +130,8 @@ def match_students_to_transcript(student_df, word_counts, student_name_column):
     return results
 
 
-def create_pdf_report(attendance_data, output_path, date_str, course_code):
-    """Create a professional PDF attendance report."""
+def create_student_report(attendance_data, output_path, date_str, course_code):
+    """Create a professional PDF attendance report for students."""
     doc = SimpleDocTemplate(
         output_path,
         pagesize=letter,
@@ -319,6 +326,127 @@ def create_pdf_report(attendance_data, output_path, date_str, course_code):
     doc.build(story)
 
 
+def create_teacher_analytics_report(teacher_word_count, student_word_count, output_path, date_str, course_code):
+    """Create a professional PDF analytics report for teachers with pie chart."""
+    doc = SimpleDocTemplate(
+        output_path,
+        pagesize=letter,
+        rightMargin=0.75*inch,
+        leftMargin=0.75*inch,
+        topMargin=1*inch,
+        bottomMargin=0.75*inch
+    )
+    
+    # Define custom styles
+    styles = getSampleStyleSheet()
+    
+    # Title style - Blue
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        textColor=colors.HexColor('#1e3a8a'),
+        spaceAfter=12,
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold'
+    )
+    
+    # Header info style - Grey
+    header_style = ParagraphStyle(
+        'HeaderInfo',
+        parent=styles['Normal'],
+        fontSize=11,
+        textColor=colors.HexColor('#4b5563'),
+        spaceAfter=6,
+        alignment=TA_CENTER,
+        fontName='Helvetica'
+    )
+    
+    # Build the document
+    story = []
+    
+    # Title
+    title = Paragraph("TEACHER ANALYTICS REPORT", title_style)
+    story.append(title)
+    story.append(Spacer(1, 0.2*inch))
+    
+    # Header information
+    header_info = [
+        f"<b>Course:</b> {course_code}",
+        f"<b>Date:</b> {date_str}",
+        f"<b>Instructor:</b> {TEACHER_NAME}"
+    ]
+    
+    for info in header_info:
+        story.append(Paragraph(info, header_style))
+    
+    story.append(Spacer(1, 0.5*inch))
+    
+    # Calculate percentages
+    total_words = teacher_word_count + student_word_count
+    if total_words > 0:
+        teacher_percentage = (teacher_word_count / total_words) * 100
+        student_percentage = (student_word_count / total_words) * 100
+    else:
+        teacher_percentage = 0
+        student_percentage = 0
+    
+    # Create pie chart
+    drawing = Drawing(400, 300)
+    
+    pie = Pie()
+    pie.x = 100
+    pie.y = 50
+    pie.width = 200
+    pie.height = 200
+    
+    # Data for pie chart
+    pie.data = [teacher_percentage, student_percentage]
+    pie.labels = [
+        f'Teacher Talking Time: {teacher_percentage:.1f}%',
+        f'Student Talking Time: {student_percentage:.1f}%'
+    ]
+    
+    # Colors: Orange for teacher, Grey for students
+    pie.slices[0].fillColor = colors.HexColor('#f97316')  # Orange
+    pie.slices[1].fillColor = colors.HexColor('#9ca3af')  # Grey
+    
+    # Slice styling
+    pie.slices[0].strokeColor = colors.white
+    pie.slices[0].strokeWidth = 2
+    pie.slices[1].strokeColor = colors.white
+    pie.slices[1].strokeWidth = 2
+    
+    # Label styling
+    pie.slices.fontName = 'Helvetica-Bold'
+    pie.slices.fontSize = 11
+    pie.slices.fontColor = colors.HexColor('#1f2937')
+    
+    # Position labels outside the pie
+    pie.slices.labelRadius = 1.25
+    pie.sideLabels = True
+    
+    drawing.add(pie)
+    
+    story.append(drawing)
+    story.append(Spacer(1, 0.5*inch))
+    
+    # Footer
+    footer_style = ParagraphStyle(
+        'Footer',
+        parent=styles['Normal'],
+        fontSize=8,
+        textColor=colors.HexColor('#6b7280'),
+        alignment=TA_CENTER,
+        fontName='Helvetica-Oblique'
+    )
+    footer = Paragraph(f"Report generated on {datetime.now().strftime('%B %d, %Y at %I:%M %p')}", footer_style)
+    story.append(footer)
+    
+    # Build PDF
+    doc.build(story)
+
+
 # ============================================================================
 # STREAMLIT APP
 # ============================================================================
@@ -340,8 +468,10 @@ def main():
         st.markdown("""
         1. **Upload your Zoom transcript** (`.txt` file)
         2. **Upload your student list** (`.xlsx` file with student names)
-        3. **Click 'Generate Report'** to create the PDF
-        4. **Download** your attendance report
+        3. **Click 'Generate Reports'** to create the PDFs
+        4. **Download** your reports:
+           - Student Report: Share with students (attendance and participation)
+           - Teacher Analytics Report: For your records only (talking time analysis)
         
         **Note:** The Excel file name will be used as the course code in the report.
         """)
@@ -368,9 +498,9 @@ def main():
     # Process button
     if transcript_file and student_file:
         st.markdown("---")
-        st.subheader("Step 2: Generate Report")
+        st.subheader("Step 2: Generate Reports")
         
-        if st.button("🚀 Generate Attendance Report", type="primary", use_container_width=True):
+        if st.button("🚀 Generate Reports", type="primary", use_container_width=True):
             try:
                 with st.spinner("Processing attendance data..."):
                     # Extract course code from Excel filename
@@ -378,7 +508,7 @@ def main():
                     
                     # Parse transcript
                     st.info("📝 Analyzing Zoom transcript...")
-                    word_counts = parse_transcript(transcript_file.read())
+                    word_counts, teacher_word_count = parse_transcript(transcript_file.read())
                     transcript_file.seek(0)  # Reset file pointer
                     
                     # Load student list
@@ -413,6 +543,9 @@ def main():
                     st.info("🔍 Matching students to participation data...")
                     attendance_data = match_students_to_transcript(student_df, word_counts, student_name_column)
                     
+                    # Calculate total student words
+                    total_student_words = sum(word_count for _, word_count, _ in attendance_data)
+                    
                     # Count statistics
                     present_count = sum(1 for _, _, status in attendance_data if status == "present")
                     absent_count = len(attendance_data) - present_count
@@ -425,38 +558,64 @@ def main():
                     col2.metric("Present", present_count, delta=None)
                     col3.metric("Absent", absent_count, delta=None)
                     
-                    # Generate PDF
-                    st.info("📄 Generating PDF report...")
+                    # Generate Student Report PDF
+                    st.info("📄 Generating Student Report...")
                     
-                    # Create temporary file for PDF
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
-                        pdf_path = tmp_file.name
+                        student_pdf_path = tmp_file.name
                         date_str = datetime.now().strftime("%B %d, %Y")
-                        create_pdf_report(attendance_data, pdf_path, date_str, course_code)
+                        create_student_report(attendance_data, student_pdf_path, date_str, course_code)
                     
-                    # Read PDF for download
-                    with open(pdf_path, 'rb') as f:
-                        pdf_data = f.read()
+                    # Read Student PDF for download
+                    with open(student_pdf_path, 'rb') as f:
+                        student_pdf_data = f.read()
                     
                     # Clean up temp file
-                    os.unlink(pdf_path)
+                    os.unlink(student_pdf_path)
                     
-                    # Download button
+                    # Generate Teacher Analytics Report PDF
+                    st.info("📊 Generating Teacher Analytics Report...")
+                    
+                    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+                        teacher_pdf_path = tmp_file.name
+                        create_teacher_analytics_report(teacher_word_count, total_student_words, teacher_pdf_path, date_str, course_code)
+                    
+                    # Read Teacher PDF for download
+                    with open(teacher_pdf_path, 'rb') as f:
+                        teacher_pdf_data = f.read()
+                    
+                    # Clean up temp file
+                    os.unlink(teacher_pdf_path)
+                    
+                    # Download buttons
                     st.markdown("---")
-                    st.subheader("Step 3: Download Report")
+                    st.subheader("Step 3: Download Reports")
                     
-                    filename = f"Attendance_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+                    col1, col2 = st.columns(2)
                     
-                    st.download_button(
-                        label="⬇️ Download PDF Report",
-                        data=pdf_data,
-                        file_name=filename,
-                        mime="application/pdf",
-                        use_container_width=True,
-                        type="primary"
-                    )
+                    with col1:
+                        student_filename = f"Student_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+                        st.download_button(
+                            label="📄 Download Student Report",
+                            data=student_pdf_data,
+                            file_name=student_filename,
+                            mime="application/pdf",
+                            use_container_width=True,
+                            type="secondary"
+                        )
                     
-                    st.success(f"🎉 Report generated successfully!")
+                    with col2:
+                        teacher_filename = f"Teacher_Analytics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+                        st.download_button(
+                            label="📊 Download Teacher Analytics",
+                            data=teacher_pdf_data,
+                            file_name=teacher_filename,
+                            mime="application/pdf",
+                            use_container_width=True,
+                            type="secondary"
+                        )
+                    
+                    st.success(f"🎉 Reports generated successfully!")
                     
             except Exception as e:
                 st.error(f"❌ An error occurred: {str(e)}")
