@@ -391,21 +391,18 @@ def create_teacher_analytics_report(teacher_word_count, student_word_count, outp
         teacher_percentage = 0
         student_percentage = 0
     
-    # Create pie chart
-    drawing = Drawing(400, 300)
+    # Create centered pie chart without labels
+    drawing = Drawing(450, 250)
     
     pie = Pie()
-    pie.x = 100
-    pie.y = 50
+    pie.x = 125
+    pie.y = 25
     pie.width = 200
     pie.height = 200
     
     # Data for pie chart
     pie.data = [teacher_percentage, student_percentage]
-    pie.labels = [
-        f'Teacher Talking Time: {teacher_percentage:.1f}%',
-        f'Student Talking Time: {student_percentage:.1f}%'
-    ]
+    pie.labels = None  # We'll add labels separately in a box
     
     # Colors: Orange for teacher, Grey for students
     pie.slices[0].fillColor = colors.HexColor('#f97316')  # Orange
@@ -417,18 +414,46 @@ def create_teacher_analytics_report(teacher_word_count, student_word_count, outp
     pie.slices[1].strokeColor = colors.white
     pie.slices[1].strokeWidth = 2
     
-    # Label styling
-    pie.slices.fontName = 'Helvetica-Bold'
-    pie.slices.fontSize = 11
-    pie.slices.fontColor = colors.HexColor('#1f2937')
-    
-    # Position labels outside the pie
-    pie.slices.labelRadius = 1.25
-    pie.sideLabels = True
-    
     drawing.add(pie)
     
     story.append(drawing)
+    story.append(Spacer(1, 0.3*inch))
+    
+    # Create centered legend box with labels
+    legend_style = ParagraphStyle(
+        'Legend',
+        parent=styles['Normal'],
+        fontSize=11,
+        textColor=colors.HexColor('#1f2937'),
+        alignment=TA_CENTER,
+        fontName='Helvetica-Bold',
+        spaceAfter=4
+    )
+    
+    # Legend data with color indicators
+    legend_data = [
+        [
+            Paragraph('<font color="#f97316">■</font> Teacher Talking Time:', legend_style),
+            Paragraph(f'{teacher_percentage:.1f}%', legend_style)
+        ],
+        [
+            Paragraph('<font color="#9ca3af">■</font> Student Talking Time:', legend_style),
+            Paragraph(f'{student_percentage:.1f}%', legend_style)
+        ]
+    ]
+    
+    # Create centered legend table
+    legend_table = Table(legend_data, colWidths=[3.2*inch, 0.8*inch])
+    legend_table.setStyle(TableStyle([
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('LEFTPADDING', (0, 0), (-1, -1), 10),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+    ]))
+    
+    story.append(legend_table)
     story.append(Spacer(1, 0.5*inch))
     
     # Footer
