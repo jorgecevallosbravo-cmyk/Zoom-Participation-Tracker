@@ -653,7 +653,7 @@ def main():
     st.markdown("---")
     st.markdown(
         "<p style='text-align: center; color: #666; font-size: 0.9em;'>"
-        "Zoom Attendance Tracker | Built for educators"
+        "Zoom Attendance Tracker | Created by Jorge Cevallos | Built for educators"
         "</p>",
         unsafe_allow_html=True
     )
