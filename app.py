@@ -201,10 +201,10 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
     
     # Create summary as invisible table for perfect alignment
     summary_data = [
-        [Paragraph(f"<b>Total Students:</b> {total_students}", summary_style)],
-        [Paragraph(f"<b>Present:</b> {present_count}", summary_style)],
-        [Paragraph(f"<b>Absent:</b> {absent_count}", summary_style)]
-    ]
+    f"<b>Total Students:</b> {total_students}",
+    f"<b>Participated:</b> {present_count}",
+    f"<b>No active participation or absent:</b> {absent_count}"
+]
     
     summary_table = Table(summary_data, colWidths=[7.4*inch])
     summary_table.setStyle(TableStyle([
