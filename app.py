@@ -206,7 +206,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         [Paragraph(f"<b>No active participation or absent:</b> {absent_count}", summary_style)]
     ]
     
-    summary_table = Table(summary_data, colWidths=[7.4*inch])
+    summary_table = Table(summary_data, colWidths=[7.3*inch])
     summary_table.setStyle(TableStyle([
         ('LEFTPADDING', (0, 0), (-1, -1), 0),
         ('RIGHTPADDING', (0, 0), (-1, -1), 0),
@@ -298,7 +298,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         ('ALIGN', (1, 1), (1, -1), 'CENTER'),
         ('ALIGN', (2, 1), (2, -1), 'LEFT'),
         ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),
-        ('VALIGN', (1, 0), (-1, -1), 'TOP'),
+        ('VALIGN', (1, 0), (-1, -1), 'MIDDLE'),
         
         # Alternating row colors
         ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f3f4f6')]),
