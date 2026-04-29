@@ -638,7 +638,7 @@ def main():
                     with col1:
                         student_filename = f"Student_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
                         st.download_button(
-                            label="📄 Download Student Report",
+                            label="📄 Download Student Participation Report",
                             data=student_pdf_data,
                             file_name=student_filename,
                             mime="application/pdf",
