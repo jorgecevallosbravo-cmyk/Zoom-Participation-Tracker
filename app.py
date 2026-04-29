@@ -26,7 +26,6 @@ import os
 # CONFIGURATION
 # ============================================================================
 
-TEACHER_NAME = "JORGE BIENVENIDO CEVALLOS BRAVO"
 PARTICIPATION_THRESHOLD = 5  # Words needed to be marked present
 
 # ============================================================================
@@ -76,7 +75,7 @@ def count_words(text):
     return len(words)
 
 
-def parse_transcript(transcript_content):
+def parse_transcript(transcript_content, teacher_name):
     """Parse the Zoom transcript and count words per speaker."""
     word_counts = defaultdict(int)
     teacher_word_count = 0
@@ -98,7 +97,7 @@ def parse_transcript(transcript_content):
             word_count = count_words(line)
             
             # Check if it's the teacher
-            if fuzzy_match_name(current_speaker, TEACHER_NAME):
+            if fuzzy_match_name(current_speaker, teacher_name):
                 teacher_word_count += word_count
             else:
                 word_counts[current_speaker] += word_count
@@ -130,7 +129,7 @@ def match_students_to_transcript(student_df, word_counts, student_name_column):
     return results
 
 
-def create_student_report(attendance_data, output_path, date_str, course_code):
+def create_student_report(attendance_data, output_path, date_str, course_code, teacher_name):
     """Create a professional PDF attendance report for students."""
     doc = SimpleDocTemplate(
         output_path,
@@ -178,7 +177,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code):
     header_info = [
         f"<b>Course:</b> {course_code}",
         f"<b>Date:</b> {date_str}",
-        f"<b>Instructor:</b> {TEACHER_NAME}"
+        f"<b>Instructor:</b> {teacher_name}"
     ]
     
     for info in header_info:
@@ -326,7 +325,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code):
     doc.build(story)
 
 
-def create_teacher_analytics_report(teacher_word_count, student_word_count, output_path, date_str, course_code):
+def create_teacher_analytics_report(teacher_word_count, student_word_count, output_path, date_str, course_code, teacher_name):
     """Create a professional PDF analytics report for teachers with pie chart."""
     doc = SimpleDocTemplate(
         output_path,
@@ -374,7 +373,7 @@ def create_teacher_analytics_report(teacher_word_count, student_word_count, outp
     header_info = [
         f"<b>Course:</b> {course_code}",
         f"<b>Date:</b> {date_str}",
-        f"<b>Instructor:</b> {TEACHER_NAME}"
+        f"<b>Instructor:</b> {teacher_name}"
     ]
     
     for info in header_info:
@@ -491,18 +490,29 @@ def main():
     # Instructions
     with st.expander("📖 How to use this tool"):
         st.markdown("""
-        1. **Upload your Zoom transcript** (`.txt` file)
-        2. **Upload your student list** (`.xlsx` file with student names)
-        3. **Click 'Generate Reports'** to create the PDFs
-        4. **Download** your reports:
+        1. **Enter your full name** exactly as it appears in your Zoom display name
+        2. **Upload your Zoom transcript** (`.txt` file)
+        3. **Upload your student list** (`.xlsx` file with student names)
+        4. **Click 'Generate Reports'** to create the PDFs
+        5. **Download** your reports:
            - Student Report: Share with students (attendance and participation)
            - Teacher Analytics Report: For your records only (talking time analysis)
         
         **Note:** The Excel file name will be used as the course code in the report.
         """)
     
+    # Teacher name input
+    st.subheader("Step 1: Enter Your Information")
+    teacher_name = st.text_input(
+        "👤 Your Full Name (as it appears in Zoom)",
+        placeholder="e.g., MARIA RODRIGUEZ",
+        help="Enter your name exactly as it appears in your Zoom display name. Use capital letters without accent marks for best results."
+    )
+    
+    st.markdown("---")
+    
     # File uploaders
-    st.subheader("Step 1: Upload Files")
+    st.subheader("Step 2: Upload Files")
     
     col1, col2 = st.columns(2)
     
@@ -521,9 +531,9 @@ def main():
         )
     
     # Process button
-    if transcript_file and student_file:
+    if teacher_name and transcript_file and student_file:
         st.markdown("---")
-        st.subheader("Step 2: Generate Reports")
+        st.subheader("Step 3: Generate Reports")
         
         if st.button("🚀 Generate Reports", type="primary", use_container_width=True):
             try:
@@ -533,7 +543,7 @@ def main():
                     
                     # Parse transcript
                     st.info("📝 Analyzing Zoom transcript...")
-                    word_counts, teacher_word_count = parse_transcript(transcript_file.read())
+                    word_counts, teacher_word_count = parse_transcript(transcript_file.read(), teacher_name)
                     transcript_file.seek(0)  # Reset file pointer
                     
                     # Load student list
@@ -589,7 +599,7 @@ def main():
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         student_pdf_path = tmp_file.name
                         date_str = datetime.now().strftime("%B %d, %Y")
-                        create_student_report(attendance_data, student_pdf_path, date_str, course_code)
+                        create_student_report(attendance_data, student_pdf_path, date_str, course_code, teacher_name)
                     
                     # Read Student PDF for download
                     with open(student_pdf_path, 'rb') as f:
@@ -603,7 +613,7 @@ def main():
                     
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         teacher_pdf_path = tmp_file.name
-                        create_teacher_analytics_report(teacher_word_count, total_student_words, teacher_pdf_path, date_str, course_code)
+                        create_teacher_analytics_report(teacher_word_count, total_student_words, teacher_pdf_path, date_str, course_code, teacher_name)
                     
                     # Read Teacher PDF for download
                     with open(teacher_pdf_path, 'rb') as f:
@@ -647,7 +657,10 @@ def main():
                 st.error("Please check your files and try again.")
     
     else:
-        st.info("👆 Please upload both files to continue")
+        if not teacher_name:
+            st.info("👆 Please enter your name to continue")
+        else:
+            st.info("👆 Please upload both files to continue")
     
     # Footer
     st.markdown("---")
