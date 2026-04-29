@@ -262,7 +262,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         
         # Participation message
         if word_count == 0:
-            participation_msg = "The student had no participation and may be marked as not present."
+            participation_msg = "The student did not participate and may be marked as not present."
         else:
             participation_msg = f"The student participated with a total of {word_count} words."
         
@@ -596,8 +596,8 @@ def main():
                     
                     col1, col2, col3 = st.columns(3)
                     col1.metric("Total Students", len(attendance_data))
-                    col2.metric("Present", present_count, delta=None)
-                    col3.metric("Absent", absent_count, delta=None)
+                    col2.metric("Participated", present_count, delta=None)
+                    col3.metric("No active participation or absent", absent_count, delta=None)
                     
                     # Generate Student Report PDF
                     st.info("📄 Generating Student Report...")
