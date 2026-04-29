@@ -477,13 +477,13 @@ def create_teacher_analytics_report(teacher_word_count, student_word_count, outp
 
 def main():
     st.set_page_config(
-        page_title="Zoom Attendance Tracker",
+        page_title="Zoom Participation Tracker",
         page_icon="📊",
         layout="centered"
     )
     
     # Header
-    st.title("📊 Zoom Attendance Tracker")
+    st.title("📊 Zoom Participation Tracker")
     st.markdown("Generate professional attendance reports from Zoom transcripts")
     st.markdown("---")
     
@@ -666,7 +666,7 @@ def main():
     st.markdown("---")
     st.markdown(
         "<p style='text-align: center; color: #666; font-size: 0.9em;'>"
-        "Zoom Attendance Tracker | Created by Jorge Cevallos | Built for educators"
+        "Zoom Participation Tracker | Created by Jorge Cevallos | Built for educators"
         "</p>",
         unsafe_allow_html=True
     )
