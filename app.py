@@ -484,7 +484,7 @@ def main():
     
     # Header
     st.title("📊 Zoom Participation Tracker")
-    st.markdown("Generate professional attendance reports from Zoom transcripts")
+    st.markdown("Generate professional participation reports from Zoom transcripts")
     st.markdown("---")
     
     # Instructions
