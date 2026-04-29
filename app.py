@@ -195,21 +195,27 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         parent=styles['Normal'],
         fontSize=10,
         textColor=colors.HexColor('#1f2937'),
-        spaceAfter=4,
         alignment=TA_LEFT,
         fontName='Helvetica'
     )
     
+    # Create summary as invisible table for perfect alignment
     summary_data = [
-        f"<b>Total Students:</b> {total_students}",
-        f"<b>Participated:</b> {present_count}",
-        f"<b>No active participation or absent:</b> {absent_count}"
+        [Paragraph(f"<b>Total Students:</b> {total_students}", summary_style)],
+        [Paragraph(f"<b>Participated:</b> {present_count}", summary_style)],
+        [Paragraph(f"<b>No active participation or absent:</b> {absent_count}", summary_style)]
     ]
     
-    for summary in summary_data:
-        story.append(Paragraph(summary, summary_style))
+    summary_table = Table(summary_data, colWidths=[7.4*inch])
+    summary_table.setStyle(TableStyle([
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
     
-    story.append(Spacer(1, 0.3*inch))
+    story.append(summary_table)
+    story.append(Spacer(1, 0.15*inch))
     
     # Table styles
     normal_style = ParagraphStyle(
