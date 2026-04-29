@@ -242,7 +242,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
     table_data = [
         [
             Paragraph('<b>APELLIDOS Y NOMBRES</b>', header_text_style),
-            Paragraph('<b>PARTICIPATION<br/>&amp;<br/>ATTENDANCE</b>', header_text_style),
+            Paragraph('<b>PARTICIPATION</b>', header_text_style),
             Paragraph('<b>PARTICIPATION DETAILS</b>', header_text_style)
         ]
     ]
@@ -256,7 +256,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         
         # Participation message
         if word_count == 0:
-            participation_msg = "The student had no participation and has been marked as not present."
+            participation_msg = "The student had no participation and may be marked as not present."
         else:
             participation_msg = f"The student participated with a total of {word_count} words."
         
