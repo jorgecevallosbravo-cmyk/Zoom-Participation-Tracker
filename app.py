@@ -511,7 +511,7 @@ def main():
     st.subheader("Step 1: Enter Your Information")
     teacher_name = st.text_input(
         "👤 Your Full Name (as it appears in Zoom)",
-        placeholder="e.g., MARIA RODRIGUEZ",
+        placeholder="e.g., MARIA JOSE GONZALEZ RODRIGUEZ",
         help="Enter your name exactly as it appears in your Zoom display name. Use capital letters without accent marks for best results."
     )
     
