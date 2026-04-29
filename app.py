@@ -215,7 +215,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
     ]))
     
     story.append(summary_table)
-    story.append(Spacer(1, 0.3*inch))
+    story.append(Spacer(1, 0.1*inch))
     
     # Table styles
     normal_style = ParagraphStyle(
