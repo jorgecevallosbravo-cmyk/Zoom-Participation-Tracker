@@ -278,7 +278,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         ])
     
     # Create table
-    table = Table(table_data, colWidths=[2.2*inch, 1.8*inch, 3.4*inch])
+    table = Table(table_data, colWidths=[2.6*inch, 1.4*inch, 3.4*inch])
     
     # Table style
     table.setStyle(TableStyle([
