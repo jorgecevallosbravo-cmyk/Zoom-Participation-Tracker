@@ -297,7 +297,8 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         ('ALIGN', (0, 1), (0, -1), 'LEFT'),
         ('ALIGN', (1, 1), (1, -1), 'CENTER'),
         ('ALIGN', (2, 1), (2, -1), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),
+        ('VALIGN', (1, 0), (-1, -1), 'TOP'),
         
         # Alternating row colors
         ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f3f4f6')]),
