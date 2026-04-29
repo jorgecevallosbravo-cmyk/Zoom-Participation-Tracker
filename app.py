@@ -185,31 +185,37 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
     
     story.append(Spacer(1, 0.3*inch))
     
-    # Summary section
-    present_count = sum(1 for _, _, status in attendance_data if status == "present")
-    total_students = len(attendance_data)
-    absent_count = total_students - present_count
-    
-    summary_style = ParagraphStyle(
-        'Summary',
-        parent=styles['Normal'],
-        fontSize=10,
-        textColor=colors.HexColor('#1f2937'),
-        spaceAfter=4,
-        alignment=TA_LEFT,
-        fontName='Helvetica'
-    )
-    
-    summary_data = [
-        f"<b>Total Students:</b> {total_students}",
-        f"<b>Present:</b> {present_count}",
-        f"<b>Absent:</b> {absent_count}"
-    ]
-    
-    for summary in summary_data:
-        story.append(Paragraph(summary, summary_style))
-    
-    story.append(Spacer(1, 0.3*inch))
+   # Summary section
+present_count = sum(1 for _, _, status in attendance_data if status == "present")
+total_students = len(attendance_data)
+absent_count = total_students - present_count
+
+summary_style = ParagraphStyle(
+    'Summary',
+    parent=styles['Normal'],
+    fontSize=10,
+    textColor=colors.HexColor('#1f2937'),
+    alignment=TA_LEFT,
+    fontName='Helvetica'
+)
+
+# Create summary as invisible table for perfect alignment
+summary_data = [
+    [Paragraph(f"<b>Total Students:</b> {total_students}", summary_style)],
+    [Paragraph(f"<b>Present:</b> {present_count}", summary_style)],
+    [Paragraph(f"<b>Absent:</b> {absent_count}", summary_style)]
+]
+
+summary_table = Table(summary_data, colWidths=[7.4*inch])
+summary_table.setStyle(TableStyle([
+    ('LEFTPADDING', (0, 0), (-1, -1), 0),
+    ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+    ('TOPPADDING', (0, 0), (-1, -1), 2),
+    ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+]))
+
+story.append(summary_table)
+story.append(Spacer(1, 0.3*inch))
     
     # Table styles
     normal_style = ParagraphStyle(
