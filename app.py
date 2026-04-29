@@ -248,7 +248,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
     
     table_data = [
         [
-            Paragraph('<b>APELLIDOS Y NOMBRES</b>', header_text_style),
+            Paragraph('<b>FULL NAME</b>', header_text_style),
             Paragraph('<b>PARTICIPATION</b>', header_text_style),
             Paragraph('<b>PARTICIPATION DETAILS</b>', header_text_style)
         ]
