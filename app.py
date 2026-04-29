@@ -440,11 +440,11 @@ def create_teacher_analytics_report(teacher_word_count, student_word_count, outp
     # Legend data with color indicators
     legend_data = [
         [
-            Paragraph('<font color="#f97316">■</font> Teacher Talking Time:', legend_style),
+            Paragraph('<font color="#f97316">■</font> Teacher Speaking Contribution:', legend_style),
             Paragraph(f'{teacher_percentage:.1f}%', legend_style)
         ],
         [
-            Paragraph('<font color="#9ca3af">■</font> Student Talking Time:', legend_style),
+            Paragraph('<font color="#9ca3af">■</font> Student Speaking Contribution:', legend_style),
             Paragraph(f'{student_percentage:.1f}%', legend_style)
         ]
     ]
