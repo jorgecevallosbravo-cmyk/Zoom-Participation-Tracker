@@ -501,7 +501,7 @@ def main():
         3. **Upload your student list** (`.xlsx` file with student names)
         4. **Click 'Generate Reports'** to create the PDFs
         5. **Download** your reports:
-           - Student Report: Share with students (attendance and participation)
+           - Student Report: Share with students showing participation details
            - Teacher Analytics Report: For your records only (talking time analysis)
         
         **Note:** The Excel file name will be used as the course code in the report.
