@@ -239,11 +239,12 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
     
     center_style = ParagraphStyle(
         'CenterText',
-        parent=styles['Normal'],
-        fontSize=14,
-        alignment=TA_CENTER,
-        fontName='Helvetica'
-    )
+         parent=styles['Normal'],
+         fontSize=14,
+         alignment=TA_CENTER,
+         fontName='Helvetica',
+         leading=14
+   )
     
     table_data = [
         [
