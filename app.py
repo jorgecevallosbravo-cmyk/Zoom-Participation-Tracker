@@ -169,7 +169,7 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
     story = []
     
     # Title
-    title = Paragraph("PARTICIPATION REPORT", title_style)
+    title = Paragraph("STUDENT PARTICIPATION REPORT", title_style)
     story.append(title)
     story.append(Spacer(1, 0.2*inch))
     
