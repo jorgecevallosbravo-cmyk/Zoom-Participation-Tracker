@@ -601,7 +601,7 @@ def main():
                     col3.metric("No active participation or absent", absent_count, delta=None)
                     
                     # Generate Student Report PDF
-                    st.info("📄 Generating Student Report...")
+                    st.info("📄 Generating Student Participation Report...")
                     
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         student_pdf_path = tmp_file.name
