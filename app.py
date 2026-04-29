@@ -1,5 +1,5 @@
 """
-Zoom Attendance Tracker - Streamlit Web App
+Zoom Participation Tracker - Streamlit Web App
 A user-friendly tool to generate attendance reports from Zoom transcripts.
 
 Author: Jorge Bienvenido Cevallos Bravo
