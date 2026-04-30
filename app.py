@@ -9,6 +9,7 @@ import streamlit as st
 import pandas as pd
 import re
 from datetime import datetime
+import pytz
 from collections import defaultdict
 import unicodedata
 from reportlab.lib import colors
@@ -326,7 +327,9 @@ def create_student_report(attendance_data, output_path, date_str, course_code, t
         alignment=TA_CENTER,
         fontName='Helvetica-Oblique'
     )
-    footer = Paragraph(f"Report generated on {datetime.now().strftime('%B %d, %Y at %I:%M %p')}", footer_style)
+    ecuador_tz = pytz.timezone('America/Guayaquil')
+    now_ecuador = datetime.now(ecuador_tz)
+    footer = Paragraph(f"Report generated on {now_ecuador.strftime('%B %d, %Y at %I:%M %p')}", footer_style)
     story.append(footer)
     
     # Build PDF
@@ -472,7 +475,9 @@ def create_teacher_analytics_report(teacher_word_count, student_word_count, outp
         alignment=TA_CENTER,
         fontName='Helvetica-Oblique'
     )
-    footer = Paragraph(f"Report generated on {datetime.now().strftime('%B %d, %Y at %I:%M %p')}", footer_style)
+    ecuador_tz = pytz.timezone('America/Guayaquil')
+    now_ecuador = datetime.now(ecuador_tz)
+    footer = Paragraph(f"Report generated on {now_ecuador.strftime('%B %d, %Y at %I:%M %p')}", footer_style)
     story.append(footer)
     
     # Build PDF
