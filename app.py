@@ -611,7 +611,9 @@ def main():
                     
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         student_pdf_path = tmp_file.name
-                        date_str = datetime.now().strftime("%B %d, %Y")
+                        ecuador_tz = pytz.timezone('America/Guayaquil')
+                        now_ecuador = datetime.now(ecuador_tz)
+                        date_str = now_ecuador.strftime("%B %d, %Y")
                         create_student_report(attendance_data, student_pdf_path, date_str, course_code, teacher_name)
                     
                     # Read Student PDF for download
