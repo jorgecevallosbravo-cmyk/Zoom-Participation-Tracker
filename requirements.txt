@@ -2,4 +2,6 @@ streamlit
 pandas
 reportlab
 openpyxl
-pillow
+fuzzywuzzy
+python-Levenshtein
+pytz
