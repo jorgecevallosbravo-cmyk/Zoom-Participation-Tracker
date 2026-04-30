@@ -13,6 +13,16 @@ Automated participation tracking for Zoom classes. Analyzes transcripts to gener
 4. Get two professional PDF reports:
    - **Student Report**: Who participated and word counts
    - **Teacher Analytics**: Teacher vs. student speaking contribution
+ <img width="1578" height="1478" alt="Captura" src="https://github.com/user-attachments/assets/90a6369e-b9a2-4a18-84db-6315a69f696e" />
+
+
+
+
+ 
+
+ 
+ <img width="902" height="1400" alt="Captura1" src="https://github.com/user-attachments/assets/df0a6299-5a28-498e-a8af-be4378ce2394" />
+
 
 ---
 ## Input File Requirements
