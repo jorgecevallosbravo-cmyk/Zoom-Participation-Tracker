@@ -514,9 +514,13 @@ def main():
             --text-medium: #57606f;
         }
         
-        /* Global styles */
+        /* Global styles - Force dark background everywhere */
+        html, body, [data-testid="stAppViewContainer"], .main, .stApp {
+            background-color: var(--slate-darker) !important;
+            background: var(--slate-darker) !important;
+        }
+        
         .main {
-            background: var(--slate-darker);
             padding: 0;
         }
         
@@ -527,8 +531,12 @@ def main():
         }
         
         /* Override Streamlit defaults */
-        .stApp {
-            background: var(--slate-darker);
+        [data-testid="stHeader"] {
+            background-color: transparent;
+        }
+        
+        section[data-testid="stSidebar"] {
+            background-color: var(--slate-dark);
         }
         
         /* Header */
@@ -543,7 +551,7 @@ def main():
         .app-title {
             font-family: 'Crimson Pro', Georgia, serif;
             font-size: 1.8rem;
-            color: #ffffff;
+            color: #ffffff !important;
             margin: 0 0 8px 0;
             text-align: center;
             font-weight: 600;
@@ -564,7 +572,7 @@ def main():
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: var(--text-medium);
+            color: #ffffff !important;
             font-weight: 700;
             margin: 35px 0 18px 0;
             font-family: 'Inter', sans-serif;
@@ -590,7 +598,7 @@ def main():
             font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 700;
-            color: var(--text-dim);
+            color: #ffffff !important;
             letter-spacing: 1.2px;
             font-family: 'Inter', sans-serif;
         }
@@ -611,7 +619,7 @@ def main():
             font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 700;
-            color: var(--text-dim);
+            color: #ffffff !important;
             letter-spacing: 1.2px;
             font-family: 'Inter', sans-serif;
         }
@@ -678,7 +686,7 @@ def main():
         div[data-testid="metric-container"] > label {
             font-size: 0.65rem;
             text-transform: uppercase;
-            color: var(--text-dim);
+            color: #ffffff !important;
             letter-spacing: 1.2px;
             font-weight: 700;
         }
@@ -709,7 +717,7 @@ def main():
             border: 1px solid var(--border-subtle);
             border-top: none;
             border-radius: 0 0 4px 4px;
-            color: #d1d8e0;
+            color: #ffffff;
             padding: 20px;
         }
         
@@ -719,7 +727,7 @@ def main():
             border: 1px solid var(--border-subtle);
             border-left: 4px solid var(--accent-copper);
             border-radius: 4px;
-            color: #d1d8e0;
+            color: #ffffff !important;
             padding: 15px 18px;
         }
         
@@ -749,7 +757,7 @@ def main():
         }
         
         .success-card p {
-            color: var(--text-dim);
+            color: #ffffff;
             font-size: 0.85rem;
             margin: 0;
         }
@@ -770,7 +778,7 @@ def main():
         
         .download-desc {
             font-size: 0.7rem;
-            color: var(--text-dim);
+            color: #d1d8e0;
             margin-bottom: 10px;
         }
         
@@ -786,14 +794,14 @@ def main():
         
         .footer-text {
             font-size: 0.75rem;
-            color: var(--text-dim);
+            color: #ffffff;
             margin: 0 0 6px 0;
             letter-spacing: 0.5px;
         }
         
         .footer-credit {
             font-size: 0.7rem;
-            color: var(--text-medium);
+            color: #d1d8e0;
             margin: 0;
         }
         
