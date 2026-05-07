@@ -492,409 +492,63 @@ def main():
     st.set_page_config(
         page_title="Zoom Participation Tracker",
         page_icon="📊",
-        layout="centered",
-        initial_sidebar_state="collapsed"
+        layout="centered"
     )
     
-    # Custom CSS with dark elegant theme
-    st.markdown("""
-        <style>
-        /* Import Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Crimson+Pro:wght@400;600&display=swap');
-        
-        :root {
-            --slate-dark: #1e272e;
-            --slate-darker: #101417;
-            --paper-bg: #ffffff;
-            --accent-copper: #e67e22;
-            --accent-hover: #d35400;
-            --accent-green: #27ae60;
-            --border-subtle: rgba(255,255,255,0.08);
-            --text-dim: #7f8c8d;
-            --text-medium: #57606f;
-        }
-        
-        /* Global styles - Force dark background everywhere */
-        html, body, [data-testid="stAppViewContainer"], .main, .stApp {
-            background-color: var(--slate-darker) !important;
-            background: var(--slate-darker) !important;
-        }
-        
-        .main {
-            padding: 0;
-        }
-        
-        .block-container {
-            padding-top: 3rem;
-            padding-bottom: 3rem;
-            max-width: 780px;
-        }
-        
-        /* Override Streamlit defaults */
-        [data-testid="stHeader"] {
-            background-color: transparent;
-        }
-        
-        section[data-testid="stSidebar"] {
-            background-color: var(--slate-dark);
-        }
-        
-        /* Header */
-        .app-header {
-            background: var(--slate-dark);
-            border: none;
-            border-radius: 4px;
-            padding: 50px 40px;
-            margin-bottom: 45px;
-        }
-        
-        .app-title {
-            font-family: 'Crimson Pro', Georgia, serif;
-            font-size: 1.8rem;
-            color: #ffffff !important;
-            margin: 0 0 8px 0;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .app-subtitle {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent-copper);
-            text-align: center;
-            font-weight: 800;
-            margin: 0;
-        }
-        
-        /* Section headers */
-        .section-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #ffffff !important;
-            font-weight: 700;
-            margin: 35px 0 18px 0;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        /* Input fields */
-        .stTextInput > div > div > input {
-            background: var(--slate-darker);
-            border: 1px solid var(--border-subtle);
-            border-radius: 4px;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            padding: 13px 14px;
-        }
-        
-        .stTextInput > div > div > input::placeholder {
-            color: #ffffff;
-            opacity: 0.6;
-        }
-        
-        .stTextInput > div > div > input:focus {
-            border-color: var(--accent-copper);
-            box-shadow: none;
-        }
-        
-        .stTextInput > label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            color: #ffffff !important;
-            letter-spacing: 1.2px;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        /* File uploader */
-        .stFileUploader {
-            background: var(--slate-dark);
-            border: 1px solid var(--border-subtle);
-            border-radius: 4px;
-            padding: 20px;
-        }
-        
-        .stFileUploader:hover {
-            border-color: rgba(230, 126, 34, 0.3);
-        }
-        
-        .stFileUploader > label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            color: #ffffff !important;
-            letter-spacing: 1.2px;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .stFileUploader section {
-            border: 2px dashed rgba(230, 126, 34, 0.3);
-            border-radius: 4px;
-            padding: 25px;
-        }
-        
-        .stFileUploader section:hover {
-            border-color: var(--accent-copper);
-            background: rgba(230, 126, 34, 0.03);
-        }
-        
-        /* Buttons */
-        .stButton > button {
-            background: var(--accent-copper);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border-radius: 4px;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.2s;
-            width: 100%;
-        }
-        
-        .stButton > button:hover {
-            background: var(--accent-hover);
-        }
-        
-        /* Download buttons */
-        .stDownloadButton > button {
-            background: var(--accent-green);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            border-radius: 4px;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.2s;
-            width: 100%;
-        }
-        
-        .stDownloadButton > button:hover {
-            background: #229954;
-        }
-        
-        /* Metrics */
-        div[data-testid="metric-container"] {
-            background: var(--slate-dark);
-            border: 1px solid var(--border-subtle);
-            border-radius: 4px;
-            padding: 20px;
-        }
-        
-        div[data-testid="metric-container"] > label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            color: #ffffff !important;
-            letter-spacing: 1.2px;
-            font-weight: 700;
-        }
-        
-        div[data-testid="metric-container"] > div {
-            color: #ffffff;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-        
-        /* Expander */
-        .streamlit-expanderHeader {
-            background: var(--slate-dark);
-            border: 1px solid var(--border-subtle);
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: #ffffff;
-            font-weight: 600;
-            padding: 15px 18px;
-        }
-        
-        .streamlit-expanderHeader:hover {
-            border-color: rgba(230, 126, 34, 0.3);
-        }
-        
-        .streamlit-expanderContent {
-            background: var(--slate-dark);
-            border: 1px solid var(--border-subtle);
-            border-top: none;
-            border-radius: 0 0 4px 4px;
-            color: #ffffff !important;
-            padding: 20px;
-        }
-        
-        .streamlit-expanderContent p,
-        .streamlit-expanderContent li,
-        .streamlit-expanderContent em,
-        .streamlit-expanderContent strong {
-            color: #ffffff !important;
-        }
-        
-        /* Info/Success/Error messages */
-        .stAlert {
-            background: var(--slate-dark);
-            border: 1px solid var(--border-subtle);
-            border-left: 4px solid var(--accent-copper);
-            border-radius: 4px;
-            color: #ffffff !important;
-            padding: 15px 18px;
-        }
-        
-        .stAlert > div {
-            color: #ffffff !important;
-        }
-        
-        .stAlert p {
-            color: #ffffff !important;
-        }
-        
-        .stSuccess {
-            border-left-color: var(--accent-green);
-        }
-        
-        .stError {
-            border-left-color: #e74c3c;
-        }
-        
-        /* Success card */
-        .success-card {
-            background: var(--slate-dark);
-            border: 1px solid rgba(39, 174, 96, 0.3);
-            border-radius: 4px;
-            padding: 28px;
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .success-card h3 {
-            color: var(--accent-green);
-            font-family: 'Crimson Pro', Georgia, serif;
-            font-size: 1.3rem;
-            margin: 0 0 8px 0;
-        }
-        
-        .success-card p {
-            color: #ffffff;
-            font-size: 0.85rem;
-            margin: 0;
-        }
-        
-        /* Download section */
-        .download-item {
-            margin-bottom: 20px;
-        }
-        
-        .download-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: #ffffff;
-            font-weight: 700;
-            margin-bottom: 4px;
-            letter-spacing: 1px;
-        }
-        
-        .download-desc {
-            font-size: 0.7rem;
-            color: #d1d8e0;
-            margin-bottom: 10px;
-        }
-        
-        /* Footer */
-        .app-footer {
-            background: var(--slate-dark);
-            border: 1px solid var(--border-subtle);
-            border-radius: 4px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 60px;
-        }
-        
-        .footer-text {
-            font-size: 0.75rem;
-            color: #ffffff;
-            margin: 0 0 6px 0;
-            letter-spacing: 0.5px;
-        }
-        
-        .footer-credit {
-            font-size: 0.7rem;
-            color: #d1d8e0;
-            margin: 0;
-        }
-        
-        /* Spinner */
-        .stSpinner > div {
-            border-top-color: var(--accent-copper);
-        }
-        
-        /* Hide Streamlit branding */
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-        </style>
-    """, unsafe_allow_html=True)
-    
     # Header
-    st.markdown("""
-        <div class="app-header">
-            <h1 class="app-title">Zoom Participation Tracker</h1>
-            <p class="app-subtitle">Integrated Workspace</p>
-        </div>
-    """, unsafe_allow_html=True)
+    st.title("📊 Zoom Participation Tracker")
+    st.markdown("Generate professional participation reports from Zoom transcripts")
+    st.markdown("---")
     
     # Instructions
-    with st.expander("📖 How to Use This Tool"):
+    with st.expander("📖 How to use this tool"):
         st.markdown("""
-        **Follow these simple steps:**
+        1. **Enter your full name** exactly as it appears in your Zoom display name
+        2. **Upload your Zoom transcript** (`.txt` file)
+        3. **Upload your student list** (`.xlsx` file with student names)
+        4. **Click 'Generate Reports'** to create the PDFs
+        5. **Download** your reports:
+           - Student Participation Report: Share with students showing participation details
+           - Teacher Analytics Report: For your records only (talking time analysis)
         
-        1. Enter your full name exactly as it appears in your Zoom display name
-        2. Upload your Zoom transcript (`.txt` file)
-        3. Upload your student list (`.xlsx` file with student names)
-        4. Click 'Generate Reports' to create the PDFs
-        5. Download your reports:
-           - **Student Participation Report**: Share with students
-           - **Teacher Analytics Report**: For your records
-        
-        *The Excel file name will be used as the course code in the report.*
+        **Note:** The Excel file name will be used as the course code in the report.
         """)
     
     # Teacher name input
-    st.markdown('<p class="section-label">Step 1: Enter Your Information</p>', unsafe_allow_html=True)
-    
+    st.subheader("Step 1: Enter Your Information")
     teacher_name = st.text_input(
-        "Your Full Name (as it appears in Zoom)",
+        "👤 Your Full Name (as it appears in Zoom)",
         placeholder="e.g., MARIA JOSE GONZALEZ RODRIGUEZ",
-        help="Enter your name exactly as it appears in your Zoom display name",
-        key="teacher_name_input"
+        help="Enter your name exactly as it appears in your Zoom display name. Use capital letters without accent marks for best results."
     )
     
+    st.markdown("---")
+    
     # File uploaders
-    st.markdown('<p class="section-label">Step 2: Upload Files</p>', unsafe_allow_html=True)
+    st.subheader("Step 2: Upload Files")
     
     col1, col2 = st.columns(2)
     
     with col1:
         transcript_file = st.file_uploader(
-            "Zoom Transcript (.txt)",
+            "📄 Zoom Transcript (.txt)",
             type=['txt'],
             help="Upload the Zoom meeting transcript file"
         )
     
     with col2:
         student_file = st.file_uploader(
-            "Student List (.xlsx)",
+            "📋 Student List (.xlsx)",
             type=['xlsx'],
             help="Upload the Excel file with student names"
         )
     
     # Process button
     if teacher_name and transcript_file and student_file:
-        st.markdown('<p class="section-label">Step 3: Generate Reports</p>', unsafe_allow_html=True)
+        st.markdown("---")
+        st.subheader("Step 3: Generate Reports")
         
-        if st.button("Generate Reports"):
+        if st.button("🚀 Generate Reports", type="primary", use_container_width=True):
             try:
                 with st.spinner("Processing attendance data..."):
                     # Extract course code from Excel filename
@@ -903,7 +557,7 @@ def main():
                     # Parse transcript
                     st.info("📝 Analyzing Zoom transcript...")
                     word_counts, teacher_word_count = parse_transcript(transcript_file.read(), teacher_name)
-                    transcript_file.seek(0)
+                    transcript_file.seek(0)  # Reset file pointer
                     
                     # Load student list
                     st.info("👥 Loading student list...")
@@ -947,13 +601,14 @@ def main():
                     # Display summary
                     st.success("✅ Processing complete!")
                     
-                    st.markdown('<p class="section-label">Summary Statistics</p>', unsafe_allow_html=True)
                     col1, col2, col3 = st.columns(3)
                     col1.metric("Total Students", len(attendance_data))
-                    col2.metric("Participated", present_count)
-                    col3.metric("Absent", absent_count)
+                    col2.metric("Participated", present_count, delta=None)
+                    col3.metric("No active participation or absent", absent_count, delta=None)
                     
                     # Generate Student Report PDF
+                    st.info("📄 Generating Student Participation Report...")
+                    
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         student_pdf_path = tmp_file.name
                         ecuador_tz = pytz.timezone('America/Guayaquil')
@@ -961,59 +616,56 @@ def main():
                         date_str = now_ecuador.strftime("%B %d, %Y")
                         create_student_report(attendance_data, student_pdf_path, date_str, course_code, teacher_name)
                     
+                    # Read Student PDF for download
                     with open(student_pdf_path, 'rb') as f:
                         student_pdf_data = f.read()
+                    
+                    # Clean up temp file
                     os.unlink(student_pdf_path)
                     
                     # Generate Teacher Analytics Report PDF
+                    st.info("📊 Generating Teacher Analytics Report...")
+                    
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         teacher_pdf_path = tmp_file.name
                         create_teacher_analytics_report(teacher_word_count, total_student_words, teacher_pdf_path, date_str, course_code, teacher_name)
                     
+                    # Read Teacher PDF for download
                     with open(teacher_pdf_path, 'rb') as f:
                         teacher_pdf_data = f.read()
+                    
+                    # Clean up temp file
                     os.unlink(teacher_pdf_path)
                     
-                    # Success message
-                    st.markdown("""
-                        <div class="success-card">
-                            <h3>Reports Generated Successfully</h3>
-                            <p>Your attendance reports are ready to download</p>
-                        </div>
-                    """, unsafe_allow_html=True)
-                    
                     # Download buttons
-                    st.markdown('<p class="section-label">Step 4: Download Your Reports</p>', unsafe_allow_html=True)
+                    st.markdown("---")
+                    st.subheader("Step 3: Download Reports")
                     
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        st.markdown('<div class="download-item">', unsafe_allow_html=True)
-                        st.markdown('<p class="download-label">Student Report</p>', unsafe_allow_html=True)
-                        st.markdown('<p class="download-desc">Share with students</p>', unsafe_allow_html=True)
                         student_filename = f"Student_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
                         st.download_button(
-                            label="Download Student Report",
+                            label="📄 Download Student Participation Report",
                             data=student_pdf_data,
                             file_name=student_filename,
                             mime="application/pdf",
-                            use_container_width=True
+                            use_container_width=True,
+                            type="secondary"
                         )
-                        st.markdown('</div>', unsafe_allow_html=True)
                     
                     with col2:
-                        st.markdown('<div class="download-item">', unsafe_allow_html=True)
-                        st.markdown('<p class="download-label">Teacher Analytics</p>', unsafe_allow_html=True)
-                        st.markdown('<p class="download-desc">For your records</p>', unsafe_allow_html=True)
                         teacher_filename = f"Teacher_Analytics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
                         st.download_button(
-                            label="Download Analytics",
+                            label="📊 Download Teacher Analytics",
                             data=teacher_pdf_data,
                             file_name=teacher_filename,
                             mime="application/pdf",
-                            use_container_width=True
+                            use_container_width=True,
+                            type="secondary"
                         )
-                        st.markdown('</div>', unsafe_allow_html=True)
+                    
+                    st.success(f"🎉 Reports generated successfully!")
                     
             except Exception as e:
                 st.error(f"❌ An error occurred: {str(e)}")
@@ -1022,16 +674,17 @@ def main():
     else:
         if not teacher_name:
             st.info("👆 Please enter your name to continue")
-        elif not transcript_file or not student_file:
+        else:
             st.info("👆 Please upload both files to continue")
     
     # Footer
-    st.markdown("""
-        <div class="app-footer">
-            <p class="footer-text">Zoom Participation Tracker</p>
-            <p class="footer-credit">Created by Jorge B. Cevallos Bravo</p>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown("---")
+    st.markdown(
+        "<p style='text-align: center; color: #666; font-size: 0.9em;'>"
+        "Zoom Participation Tracker | Created by Jorge B. Cevallos | Built for educators"
+        "</p>",
+        unsafe_allow_html=True
+    )
 
 
 if __name__ == "__main__":
