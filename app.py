@@ -542,7 +542,7 @@ def main():
         /* Header */
         .app-header {
             background: var(--slate-dark);
-            border: 1px solid rgba(230, 126, 34, 0.2);
+            border: none;
             border-radius: 4px;
             padding: 50px 40px;
             margin-bottom: 45px;
@@ -587,6 +587,11 @@ def main():
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
             padding: 13px 14px;
+        }
+        
+        .stTextInput > div > div > input::placeholder {
+            color: #ffffff;
+            opacity: 0.6;
         }
         
         .stTextInput > div > div > input:focus {
@@ -717,8 +722,15 @@ def main():
             border: 1px solid var(--border-subtle);
             border-top: none;
             border-radius: 0 0 4px 4px;
-            color: #ffffff;
+            color: #ffffff !important;
             padding: 20px;
+        }
+        
+        .streamlit-expanderContent p,
+        .streamlit-expanderContent li,
+        .streamlit-expanderContent em,
+        .streamlit-expanderContent strong {
+            color: #ffffff !important;
         }
         
         /* Info/Success/Error messages */
@@ -729,6 +741,14 @@ def main():
             border-radius: 4px;
             color: #ffffff !important;
             padding: 15px 18px;
+        }
+        
+        .stAlert > div {
+            color: #ffffff !important;
+        }
+        
+        .stAlert p {
+            color: #ffffff !important;
         }
         
         .stSuccess {
