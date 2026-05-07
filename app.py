@@ -496,306 +496,386 @@ def main():
         initial_sidebar_state="collapsed"
     )
     
-    # Custom CSS for professional styling
+    # Custom CSS with dark elegant theme
     st.markdown("""
         <style>
-        /* Import Google Font */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Crimson+Pro:wght@400;600&display=swap');
         
-        /* Main container styling */
+        :root {
+            --slate-dark: #1e272e;
+            --slate-darker: #101417;
+            --paper-bg: #ffffff;
+            --accent-copper: #e67e22;
+            --accent-hover: #d35400;
+            --accent-green: #27ae60;
+            --border-subtle: rgba(255,255,255,0.08);
+            --text-dim: #7f8c8d;
+            --text-medium: #57606f;
+        }
+        
+        /* Global styles */
         .main {
-            padding-top: 2rem;
+            background: var(--slate-darker);
+            padding: 0;
         }
         
-        /* Override default font */
-        html, body, [class*="css"] {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        .block-container {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            max-width: 780px;
         }
         
-        /* Header styling */
-        .header-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 2.5rem 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        /* Override Streamlit defaults */
+        .stApp {
+            background: var(--slate-darker);
         }
         
-        .header-title {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        /* Header */
+        .app-header {
+            background: var(--slate-dark);
+            border: 1px solid rgba(230, 126, 34, 0.2);
+            border-radius: 4px;
+            padding: 50px 40px;
+            margin-bottom: 45px;
+        }
+        
+        .app-title {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin: 0 0 8px 0;
             text-align: center;
-            letter-spacing: -0.5px;
+            font-weight: 600;
         }
         
-        .header-subtitle {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 1.15rem;
+        .app-subtitle {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-copper);
             text-align: center;
-            margin-bottom: 0;
-            font-weight: 400;
-        }
-        
-        /* Step headers */
-        .step-header {
-            background: linear-gradient(90deg, #f8fafc 0%, #f1f5f9 100%);
-            padding: 1.2rem 1.5rem;
-            border-radius: 12px;
-            border-left: 5px solid #667eea;
-            margin: 2rem 0 1.5rem 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-        
-        .step-header h3 {
-            color: #1e293b;
+            font-weight: 800;
             margin: 0;
-            font-size: 1.35rem;
-            font-weight: 600;
         }
         
-        /* Info boxes */
-        .info-box {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border-left: 4px solid #3b82f6;
-            padding: 1.2rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.1);
+        /* Section headers */
+        .section-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-medium);
+            font-weight: 700;
+            margin: 35px 0 18px 0;
+            font-family: 'Inter', sans-serif;
         }
         
-        /* Metric cards enhancement */
-        div[data-testid="metric-container"] {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border: 1px solid #e2e8f0;
-            padding: 1.5rem;
-            border-radius: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s ease;
+        /* Input fields */
+        .stTextInput > div > div > input {
+            background: var(--slate-darker);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            padding: 13px 14px;
         }
         
-        div[data-testid="metric-container"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        .stTextInput > div > div > input:focus {
+            border-color: var(--accent-copper);
+            box-shadow: none;
         }
         
-        div[data-testid="metric-container"] > div {
-            color: #1e293b;
-            font-weight: 600;
+        .stTextInput > label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-dim);
+            letter-spacing: 1.2px;
+            font-family: 'Inter', sans-serif;
         }
         
-        /* Button styling */
+        /* File uploader */
+        .stFileUploader {
+            background: var(--slate-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            padding: 20px;
+        }
+        
+        .stFileUploader:hover {
+            border-color: rgba(230, 126, 34, 0.3);
+        }
+        
+        .stFileUploader > label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-dim);
+            letter-spacing: 1.2px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .stFileUploader section {
+            border: 2px dashed rgba(230, 126, 34, 0.3);
+            border-radius: 4px;
+            padding: 25px;
+        }
+        
+        .stFileUploader section:hover {
+            border-color: var(--accent-copper);
+            background: rgba(230, 126, 34, 0.03);
+        }
+        
+        /* Buttons */
         .stButton > button {
-            border-radius: 10px;
-            font-weight: 600;
-            padding: 0.75rem 2.5rem;
-            transition: all 0.3s ease;
-            font-size: 1.05rem;
-        }
-        
-        .stButton > button[kind="primary"] {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--accent-copper);
+            color: white;
             border: none;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            padding: 14px 28px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+            width: 100%;
         }
         
-        .stButton > button[kind="primary"]:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        .stButton > button:hover {
+            background: var(--accent-hover);
         }
         
         /* Download buttons */
         .stDownloadButton > button {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: var(--accent-green);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            padding: 0.8rem 1.8rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+            padding: 12px 24px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+            width: 100%;
         }
         
         .stDownloadButton > button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+            background: #229954;
         }
         
-        /* File uploader enhancement */
-        div[data-testid="stFileUploader"] {
-            background: #fafafa;
-            border: 2.5px dashed #cbd5e1;
-            border-radius: 14px;
-            padding: 2rem 1.5rem;
-            transition: all 0.3s ease;
+        /* Metrics */
+        div[data-testid="metric-container"] {
+            background: var(--slate-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            padding: 20px;
         }
         
-        div[data-testid="stFileUploader"]:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        div[data-testid="metric-container"] > label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            letter-spacing: 1.2px;
+            font-weight: 700;
         }
         
-        /* Text input styling */
-        .stTextInput > div > div > input {
-            border-radius: 10px;
-            border: 2px solid #e2e8f0;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            transition: all 0.2s ease;
+        div[data-testid="metric-container"] > div {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 700;
         }
         
-        .stTextInput > div > div > input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        /* Expander enhancement */
+        /* Expander */
         .streamlit-expanderHeader {
-            background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 100%);
-            border-radius: 10px;
+            background: var(--slate-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #ffffff;
             font-weight: 600;
-            color: #374151;
-            padding: 1rem 1.2rem;
-            border: 1px solid #e5e7eb;
+            padding: 15px 18px;
         }
         
         .streamlit-expanderHeader:hover {
-            background: linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-color: rgba(230, 126, 34, 0.3);
         }
         
-        /* Success message */
-        .success-container {
-            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            border: 2px solid #10b981;
-            border-radius: 14px;
-            padding: 1.8rem;
-            margin: 1.5rem 0;
+        .streamlit-expanderContent {
+            background: var(--slate-dark);
+            border: 1px solid var(--border-subtle);
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            color: #d1d8e0;
+            padding: 20px;
+        }
+        
+        /* Info/Success/Error messages */
+        .stAlert {
+            background: var(--slate-dark);
+            border: 1px solid var(--border-subtle);
+            border-left: 4px solid var(--accent-copper);
+            border-radius: 4px;
+            color: #d1d8e0;
+            padding: 15px 18px;
+        }
+        
+        .stSuccess {
+            border-left-color: var(--accent-green);
+        }
+        
+        .stError {
+            border-left-color: #e74c3c;
+        }
+        
+        /* Success card */
+        .success-card {
+            background: var(--slate-dark);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+            border-radius: 4px;
+            padding: 28px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            margin: 30px 0;
+        }
+        
+        .success-card h3 {
+            color: var(--accent-green);
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.3rem;
+            margin: 0 0 8px 0;
+        }
+        
+        .success-card p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        /* Download section */
+        .download-item {
+            margin-bottom: 20px;
+        }
+        
+        .download-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+        
+        .download-desc {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-bottom: 10px;
         }
         
         /* Footer */
-        .footer-container {
-            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-            padding: 2rem;
-            border-radius: 12px;
+        .app-footer {
+            background: var(--slate-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            padding: 25px;
             text-align: center;
-            margin-top: 4rem;
-            border-top: 3px solid #e5e7eb;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 60px;
         }
         
         .footer-text {
-            color: #6b7280;
-            font-size: 0.95rem;
-            margin: 0;
-            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin: 0 0 6px 0;
+            letter-spacing: 0.5px;
         }
         
         .footer-credit {
-            color: #9ca3af;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-medium);
+            margin: 0;
         }
         
-        /* Divider */
-        hr {
-            margin: 2.5rem 0;
-            border: none;
-            border-top: 2px solid #e5e7eb;
-            opacity: 0.6;
+        /* Spinner */
+        .stSpinner > div {
+            border-top-color: var(--accent-copper);
         }
         
-        /* Info/Warning/Success messages */
-        .stAlert {
-            border-radius: 10px;
-            border-left-width: 5px;
-        }
+        /* Hide Streamlit branding */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
         </style>
     """, unsafe_allow_html=True)
     
-    # Header with gradient background
+    # Header
     st.markdown("""
-        <div class="header-container">
-            <h1 class="header-title">📊 Zoom Participation Tracker</h1>
-            <p class="header-subtitle">Generate professional participation reports from Zoom transcripts</p>
+        <div class="app-header">
+            <h1 class="app-title">Zoom Participation Tracker</h1>
+            <p class="app-subtitle">Integrated Workspace</p>
         </div>
     """, unsafe_allow_html=True)
     
     # Instructions
-    with st.expander("📖 How to use this tool", expanded=False):
+    with st.expander("📖 How to Use This Tool"):
         st.markdown("""
-        <div style="padding: 0.5rem;">
-        
         **Follow these simple steps:**
         
-        1. **Enter your full name** exactly as it appears in your Zoom display name
-        2. **Upload your Zoom transcript** (`.txt` file)
-        3. **Upload your student list** (`.xlsx` file with student names)
-        4. **Click 'Generate Reports'** to create the PDFs
-        5. **Download** your reports:
-           - **Student Participation Report**: Share with students showing participation details
-           - **Teacher Analytics Report**: For your records only (talking time analysis)
+        1. Enter your full name exactly as it appears in your Zoom display name
+        2. Upload your Zoom transcript (`.txt` file)
+        3. Upload your student list (`.xlsx` file with student names)
+        4. Click 'Generate Reports' to create the PDFs
+        5. Download your reports:
+           - **Student Participation Report**: Share with students
+           - **Teacher Analytics Report**: For your records
         
-        > **📌 Note:** The Excel file name will be used as the course code in the report.
-        
-        </div>
-        """, unsafe_allow_html=True)
+        *The Excel file name will be used as the course code in the report.*
+        """)
     
     # Teacher name input
-    st.markdown('<div class="step-header"><h3>Step 1: Enter Your Information</h3></div>', unsafe_allow_html=True)
+    st.markdown('<p class="section-label">Step 1: Enter Your Information</p>', unsafe_allow_html=True)
     
     teacher_name = st.text_input(
-        "👤 Your Full Name (as it appears in Zoom)",
+        "Your Full Name (as it appears in Zoom)",
         placeholder="e.g., MARIA JOSE GONZALEZ RODRIGUEZ",
-        help="Enter your name exactly as it appears in your Zoom display name. Use capital letters without accent marks for best results.",
+        help="Enter your name exactly as it appears in your Zoom display name",
         key="teacher_name_input"
     )
     
     # File uploaders
-    st.markdown('<div class="step-header"><h3>Step 2: Upload Files</h3></div>', unsafe_allow_html=True)
+    st.markdown('<p class="section-label">Step 2: Upload Files</p>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("**📄 Zoom Transcript**")
         transcript_file = st.file_uploader(
-            "Upload Zoom meeting transcript",
+            "Zoom Transcript (.txt)",
             type=['txt'],
-            help="Upload the Zoom meeting transcript file (.txt format)",
-            label_visibility="collapsed"
+            help="Upload the Zoom meeting transcript file"
         )
     
     with col2:
-        st.markdown("**📋 Student List**")
         student_file = st.file_uploader(
-            "Upload student list Excel file",
+            "Student List (.xlsx)",
             type=['xlsx'],
-            help="Upload the Excel file with student names",
-            label_visibility="collapsed"
+            help="Upload the Excel file with student names"
         )
     
     # Process button
     if teacher_name and transcript_file and student_file:
-        st.markdown('<div class="step-header"><h3>Step 3: Generate Reports</h3></div>', unsafe_allow_html=True)
+        st.markdown('<p class="section-label">Step 3: Generate Reports</p>', unsafe_allow_html=True)
         
-        # Center the button
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            generate_button = st.button("🚀 Generate Reports", type="primary", use_container_width=True)
-        
-        if generate_button:
+        if st.button("Generate Reports"):
             try:
-                with st.spinner("🔄 Processing attendance data..."):
+                with st.spinner("Processing attendance data..."):
                     # Extract course code from Excel filename
                     course_code = os.path.splitext(student_file.name)[0]
                     
                     # Parse transcript
                     st.info("📝 Analyzing Zoom transcript...")
                     word_counts, teacher_word_count = parse_transcript(transcript_file.read(), teacher_name)
-                    transcript_file.seek(0)  # Reset file pointer
+                    transcript_file.seek(0)
                     
                     # Load student list
                     st.info("👥 Loading student list...")
@@ -839,17 +919,13 @@ def main():
                     # Display summary
                     st.success("✅ Processing complete!")
                     
-                    st.markdown("### 📊 Summary Statistics")
+                    st.markdown('<p class="section-label">Summary Statistics</p>', unsafe_allow_html=True)
                     col1, col2, col3 = st.columns(3)
                     col1.metric("Total Students", len(attendance_data))
-                    col2.metric("✓ Participated", present_count)
-                    col3.metric("✗ Absent/No Participation", absent_count)
-                    
-                    st.markdown("<br>", unsafe_allow_html=True)
+                    col2.metric("Participated", present_count)
+                    col3.metric("Absent", absent_count)
                     
                     # Generate Student Report PDF
-                    st.info("📄 Generating Student Participation Report...")
-                    
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         student_pdf_path = tmp_file.name
                         ecuador_tz = pytz.timezone('America/Guayaquil')
@@ -857,80 +933,75 @@ def main():
                         date_str = now_ecuador.strftime("%B %d, %Y")
                         create_student_report(attendance_data, student_pdf_path, date_str, course_code, teacher_name)
                     
-                    # Read Student PDF for download
                     with open(student_pdf_path, 'rb') as f:
                         student_pdf_data = f.read()
-                    
-                    # Clean up temp file
                     os.unlink(student_pdf_path)
                     
                     # Generate Teacher Analytics Report PDF
-                    st.info("📊 Generating Teacher Analytics Report...")
-                    
                     with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
                         teacher_pdf_path = tmp_file.name
                         create_teacher_analytics_report(teacher_word_count, total_student_words, teacher_pdf_path, date_str, course_code, teacher_name)
                     
-                    # Read Teacher PDF for download
                     with open(teacher_pdf_path, 'rb') as f:
                         teacher_pdf_data = f.read()
-                    
-                    # Clean up temp file
                     os.unlink(teacher_pdf_path)
                     
-                    # Download buttons section
-                    st.markdown('<div class="step-header"><h3>Step 4: Download Your Reports</h3></div>', unsafe_allow_html=True)
+                    # Success message
+                    st.markdown("""
+                        <div class="success-card">
+                            <h3>Reports Generated Successfully</h3>
+                            <p>Your attendance reports are ready to download</p>
+                        </div>
+                    """, unsafe_allow_html=True)
+                    
+                    # Download buttons
+                    st.markdown('<p class="section-label">Step 4: Download Your Reports</p>', unsafe_allow_html=True)
                     
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        st.markdown("**📄 Student Report**")
-                        st.markdown("<small>Share with students</small>", unsafe_allow_html=True)
+                        st.markdown('<div class="download-item">', unsafe_allow_html=True)
+                        st.markdown('<p class="download-label">Student Report</p>', unsafe_allow_html=True)
+                        st.markdown('<p class="download-desc">Share with students</p>', unsafe_allow_html=True)
                         student_filename = f"Student_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
                         st.download_button(
-                            label="📥 Download Student Report",
+                            label="Download Student Report",
                             data=student_pdf_data,
                             file_name=student_filename,
                             mime="application/pdf",
                             use_container_width=True
                         )
+                        st.markdown('</div>', unsafe_allow_html=True)
                     
                     with col2:
-                        st.markdown("**📊 Teacher Analytics**")
-                        st.markdown("<small>For your records</small>", unsafe_allow_html=True)
+                        st.markdown('<div class="download-item">', unsafe_allow_html=True)
+                        st.markdown('<p class="download-label">Teacher Analytics</p>', unsafe_allow_html=True)
+                        st.markdown('<p class="download-desc">For your records</p>', unsafe_allow_html=True)
                         teacher_filename = f"Teacher_Analytics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
                         st.download_button(
-                            label="📥 Download Analytics",
+                            label="Download Analytics",
                             data=teacher_pdf_data,
                             file_name=teacher_filename,
                             mime="application/pdf",
                             use_container_width=True
                         )
-                    
-                    st.markdown("""
-                        <div class="success-container">
-                            <h3 style="color: #059669; margin: 0;">🎉 Reports Generated Successfully!</h3>
-                            <p style="color: #047857; margin-top: 0.5rem; margin-bottom: 0;">Your attendance reports are ready to download.</p>
-                        </div>
-                    """, unsafe_allow_html=True)
+                        st.markdown('</div>', unsafe_allow_html=True)
                     
             except Exception as e:
                 st.error(f"❌ An error occurred: {str(e)}")
                 st.error("Please check your files and try again.")
     
     else:
-        st.markdown('<div class="info-box">', unsafe_allow_html=True)
         if not teacher_name:
             st.info("👆 Please enter your name to continue")
-        else:
+        elif not transcript_file or not student_file:
             st.info("👆 Please upload both files to continue")
-        st.markdown('</div>', unsafe_allow_html=True)
     
     # Footer
     st.markdown("""
-        <div class="footer-container">
-            <p class="footer-text">📊 Zoom Participation Tracker</p>
-            <p class="footer-credit">Created by Jorge B. Cevallos Bravo | Built for educators with ❤️</p>
+        <div class="app-footer">
+            <p class="footer-text">Zoom Participation Tracker</p>
+            <p class="footer-credit">Created by Jorge B. Cevallos Bravo</p>
         </div>
     """, unsafe_allow_html=True)
 
