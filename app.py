@@ -30,6 +30,28 @@ import os
 PARTICIPATION_THRESHOLD = 5  # Words needed to be marked present
 
 # ============================================================================
+# PASSWORD GATE
+# ============================================================================
+
+def check_password():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+
+    if st.session_state.authenticated:
+        return True
+
+    st.markdown("## 📊 Zoom Participation Tracker")
+    st.markdown("---")
+    pwd = st.text_input("Password", type="password", placeholder="Enter password")
+    if st.button("Login", type="primary"):
+        if pwd.lower() == "portafolio":
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Incorrect password.")
+    return False
+
+# ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
 
@@ -494,7 +516,10 @@ def main():
         page_icon="📊",
         layout="centered"
     )
-    
+
+    if not check_password():
+        st.stop()
+
     # Header
     st.title("📊 Zoom Participation Tracker")
     st.markdown("Generate professional participation reports from Zoom transcripts")
